@@ -1,23 +1,17 @@
 package main
 
 import (
-	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/widget"
+	"os"
+	"weatherDesktop/api"
+	"weatherDesktop/configs"
+	"weatherDesktop/scripts"
 )
 
-func main(){
-	app := app.New()
-	window := app.NewWindow("Hello")
+func main() {
+	configs.InitConfig()
 
-	hello := widget.NewLabel("Hello Fyne!")
-
-	window.SetContent(container.NewVBox(
-		hello,
-		widget.NewButton("Hi!", func() {
-			hello.SetText("It`s Test fyne settings linux")
-		}),
-	))
-
-	window.ShowAndRun()
+	if apiKey, exists := os.LookupEnv("API_WEATHER_KEY"); exists {
+		res := api.GetWeatherResult(apiKey)
+		scripts.InitUI(res)
+	}
 }
