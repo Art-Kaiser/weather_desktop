@@ -13,7 +13,7 @@ func GetWeatherResult(apiKey string) *owm.CurrentWeatherData {
 		log.Fatalln(err)
 	}
 
-	weather.CurrentByName("Ufa, RU")
+	weather.CurrentByName("Krasnodar, RU")
 	fmt.Println(weather.Weather[0].Description, weather.Name, weather.Main)
 	return weather
 }
