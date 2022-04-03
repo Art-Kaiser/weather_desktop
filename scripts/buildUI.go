@@ -8,40 +8,50 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 	owm "github.com/briandowns/openweathermap"
+	"math"
 	"time"
 	"weatherDesktop/api"
 )
+
+func FahrenheitCelsius(f float64) float64 {
+	return (f - 32) * 5 / 9
+}
 
 func InitUI(res *owm.CurrentWeatherData, forecast *api.WeatherForecast) {
 	app := app.New()
 	window := app.NewWindow("Watch the weather")
 	window.Resize(fyne.NewSize(550, 450))
 	iconApp, _ := fyne.LoadResourceFromPath("./assets/icon.png")
-	//weatherIcon := container.NewGridWrap(fyne.NewSize(150, 150), canvas.NewImageFromFile(fmt.Sprintf("./assets/weather/%s.png", res.Weather[0].Icon)))
-	resources, _ := fyne.LoadResourceFromURLString(fmt.Sprintf("http://openweathermap.org/img/wn/%s.png", res.Weather[0].Icon))
-	weatherIcon := container.NewGridWrap(fyne.NewSize(150, 150), canvas.NewImageFromResource(resources))
+
+	weatherIcon := container.NewGridWrap(
+		fyne.NewSize(175, 175),
+		canvas.NewImageFromFile(
+			fmt.Sprintf("./assets/weather/%s.png", res.Weather[0].Icon),
+		),
+	)
 
 	window.SetIcon(iconApp)
-	timeDt := time.Unix(int64(res.Dt), 0).String()
 
 	leftBox := container.NewVBox(
 		container.NewHBox(
 			widget.NewLabel(fmt.Sprintf("Погодные условия: %s", res.Weather[0].Description)),
 		),
 		container.NewHBox(
-			widget.NewLabel(fmt.Sprintf("Температура: %f C°", res.Main.Temp)),
+			widget.NewLabel(fmt.Sprintf("Температура: %v C°", math.Round(res.Main.Temp))),
 		),
 		container.NewHBox(
-			widget.NewLabel(fmt.Sprintf("Ветер: %f м/сек", res.Wind.Speed)),
+			widget.NewLabel(fmt.Sprintf("Ветер: %v м/сек", math.Round(res.Wind.Speed))),
 		),
 		container.NewHBox(
 			widget.NewLabel(fmt.Sprintf("Влажность: %d%%", res.Main.Humidity)),
 		),
 	)
 
-	top := widget.NewCard(
+	_, monthRes, dayRes := time.Unix(int64(res.Dt), 0).Date()
+
+	panelTop := widget.NewCard(
 		fmt.Sprintf("Местоположение: %s", res.Name),
-		timeDt,
+		fmt.Sprintf("Дата: %s %v", monthRes, dayRes),
 		container.NewHBox(
 			leftBox,
 			weatherIcon,
@@ -49,32 +59,40 @@ func InitUI(res *owm.CurrentWeatherData, forecast *api.WeatherForecast) {
 
 	bottomBox := container.NewHBox()
 
-	for i := 0; i < len(forecast.Daily); i++ {
-		fmt.Println(forecast.Daily[i].Weather[0].Icon)
-		resource, _ := fyne.LoadResourceFromURLString(fmt.Sprintf("http://openweathermap.org/img/wn/%s.png", forecast.Daily[i].Weather[0].Icon))
+	for i := 1; i < len(forecast.Daily); i++ {
+		weatherBottomIcon := container.NewGridWrap(
+			fyne.NewSize(150, 150),
+			canvas.NewImageFromFile(
+				fmt.Sprintf("./assets/weather/%s.png", forecast.Daily[i].Weather[0].Icon),
+			),
+		)
+		_, month, day := time.Unix(int64(forecast.Daily[i].Dt), 0).Date()
+
 		weatherGroup := widget.NewCard(
-			fmt.Sprintf("Дата: %s", time.Unix(int64(forecast.Daily[i].Dt), 0)),
+			fmt.Sprintf("Дата: %s %v", month, day),
 			"",
-			container.NewVBox(
-				widget.NewLabel(fmt.Sprintf("Погодные условия: %s", forecast.Daily[i].Weather[0].Description)),
-				widget.NewLabel(fmt.Sprintf("Температура: %.2f °C", forecast.Daily[i].Temp.Day)),
-				widget.NewLabel(fmt.Sprintf("Ветер: %f м/сек", forecast.Daily[i].WindSpeed)),
-				widget.NewLabel(fmt.Sprintf("Влажность: %d%%", forecast.Daily[i].Humidity)),
+			container.NewHBox(
+				container.NewVBox(
+					widget.NewLabel(fmt.Sprintf("Погодные условия: %s", forecast.Daily[i].Weather[0].Description)),
+					widget.NewLabel(fmt.Sprintf("Температура: %v °C", math.Round(forecast.Daily[i].Temp.Day))),
+					widget.NewLabel(fmt.Sprintf("Ветер: %v м/сек", math.Round(forecast.Daily[i].WindSpeed))),
+					widget.NewLabel(fmt.Sprintf("Влажность: %d%%", forecast.Daily[i].Humidity)),
+				),
+				weatherBottomIcon,
 			),
 		)
 
 		bottomBox.Add(weatherGroup)
-		bottomBox.Add(widget.NewIcon(resource))
 	}
 
-	bottom := container.NewGridWrap(
+	panelBottom := container.NewGridWrap(
 		fyne.NewSize(600, 225),
 		container.NewHScroll(bottomBox),
 	)
 
 	window.SetContent(container.NewVBox(
-		top,
-		bottom,
+		panelTop,
+		panelBottom,
 	))
 
 	window.ShowAndRun()
