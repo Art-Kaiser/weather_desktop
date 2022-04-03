@@ -7,32 +7,32 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 	owm "github.com/briandowns/openweathermap"
+	"time"
 )
 
 func InitUI(res *owm.CurrentWeatherData) {
 	app := app.New()
-	icon, _ := fyne.LoadResourceFromPath("sun.png")
+	icon, _ := fyne.LoadResourceFromPath("./assets/sun.png")
+	timeDt := time.Unix(int64(res.Dt), 0).String()
 
 	window := app.NewWindow("Watch the weather")
 	window.Resize(fyne.NewSize(700, 450))
 	window.SetIcon(icon)
-	fmt.Println("res.Main.Temp:", res.Main.Temp, res.Wind.Speed)
 
 	//colorTitle := color.NRGBA{R: 10, G: 52, B: 64, A: 100}
 	//title := canvas.NewText("Прогноз на день", colorTitle)
 
-	title := widget.NewLabel("Прогноз на день")
-	footerB := widget.NewLabel("Прогноз на неделю")
+	//title := widget.NewLabel("Прогноз на день")
 	footer := widget.NewLabel("Ссылки")
 
-	buttonRefresh := widget.NewButton("Обновить", func() {
+	/*buttonRefresh := widget.NewButton("Обновить", func() {
 		fmt.Println(res)
-	})
+	})*/
 
-	header := container.NewHBox(
+	/*header := container.NewHBox(
 		title,
 		buttonRefresh,
-	)
+	)*/
 
 	miniIcon, _ := fyne.LoadResourceFromURLString(fmt.Sprintf("http://openweathermap.org/img/wn/%s.png", res.Weather[0].Icon))
 
@@ -63,9 +63,9 @@ func InitUI(res *owm.CurrentWeatherData) {
 	wrapper := container.NewHBox(leftBox, rightBox)
 
 	window.SetContent(container.NewVBox(
-		header,
+		//header,
+		widget.NewLabel(timeDt),
 		wrapper,
-		footerB,
 		footer,
 	))
 
