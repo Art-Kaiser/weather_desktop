@@ -17,7 +17,7 @@ func GetWeatherResult(apiKey string) *owm.CurrentWeatherData {
 		log.Fatalln(err)
 	}
 	//test location
-	weather.CurrentByName("Краснодар, RU")
+	weather.CurrentByName("Москва, RU")
 	return weather
 }
 
