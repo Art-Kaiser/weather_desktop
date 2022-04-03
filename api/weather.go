@@ -17,13 +17,13 @@ func GetWeatherResult(apiKey string) *owm.CurrentWeatherData {
 		log.Fatalln(err)
 	}
 	//test location
-	weather.CurrentByName("Москва, RU")
+	weather.CurrentByName("Химки, RU")
 	return weather
 }
 
 func GetWeathersResult(apiKey string, result *WeatherForecast) error {
 	//test coordinates
-	res, err := myClient.Get(fmt.Sprintf("https://api.openweathermap.org/data/2.5/onecall?lat=55.744458375950536&lon=37.62184820096254&lang=ru&exclude=minutely,hourly,current,alerts&appid=%s", apiKey))
+	res, err := myClient.Get(fmt.Sprintf("https://api.openweathermap.org/data/2.5/onecall?lat=55.744458375950536&lon=37.62184820096254&lang=ru&units=metric&exclude=minutely,hourly,current,alerts&appid=%s", apiKey))
 	if err != nil {
 		log.Fatalln(err)
 	}
