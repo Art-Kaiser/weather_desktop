@@ -17,6 +17,6 @@ func main() {
 		res := api.GetWeatherResult(apiKey)
 		api.GetWeathersResult(apiKey, forecast)
 		api.GetCoordinatesCity(apiKey, "Moskow", sity)
-		scripts.InitUI(res)
+		scripts.InitUI(res, forecast)
 	}
 }
