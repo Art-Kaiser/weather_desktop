@@ -6,6 +6,8 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 	owm "github.com/briandowns/openweathermap"
 	"math"
@@ -21,13 +23,26 @@ func InitUI(res *owm.CurrentWeatherData, forecast *api.WeatherForecast) {
 	app := app.New()
 	window := app.NewWindow("Watch the weather")
 	window.Resize(fyne.NewSize(550, 450))
+	window.SetFixedSize(true)
+
 	iconApp, _ := fyne.LoadResourceFromPath("./assets/icon.png")
 
+	img := canvas.NewImageFromResource(theme.FyneLogo())
+	img.FillMode = canvas.ImageFillOriginal
+	//text := canvas.NewText("Overlay", color.Black)
+
 	weatherIcon := container.NewGridWrap(
-		fyne.NewSize(175, 175),
+		fyne.NewSize(160, 160),
 		canvas.NewImageFromFile(
 			fmt.Sprintf("./assets/weather/%s.png", res.Weather[0].Icon),
 		),
+	)
+
+	contentCenter := container.New(layout.NewCenterLayout(), weatherIcon)
+
+	weatherIconWrapper := container.NewGridWrap(
+		fyne.NewSize(250, 150),
+		contentCenter,
 	)
 
 	window.SetIcon(iconApp)
@@ -54,7 +69,7 @@ func InitUI(res *owm.CurrentWeatherData, forecast *api.WeatherForecast) {
 		fmt.Sprintf("Дата: %s %v", monthRes, dayRes),
 		container.NewHBox(
 			leftBox,
-			weatherIcon,
+			weatherIconWrapper,
 		))
 
 	bottomBox := container.NewHBox()
