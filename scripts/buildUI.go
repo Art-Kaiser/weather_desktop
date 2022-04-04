@@ -19,10 +19,9 @@ func InitUI(res *owm.CurrentWeatherData, forecast *api.WeatherForecast) {
 	window := app.NewWindow("Watch the weather")
 	window.Resize(fyne.NewSize(550, 450))
 	window.SetFixedSize(true)
+	window.SetMaster()
 
 	iconApp, _ := fyne.LoadResourceFromPath("./assets/icon.png")
-
-	//text := canvas.NewText("Overlay", color.Black)
 
 	weatherIcon := container.NewGridWrap(
 		fyne.NewSize(160, 160),
@@ -53,6 +52,24 @@ func InitUI(res *owm.CurrentWeatherData, forecast *api.WeatherForecast) {
 		container.NewHBox(
 			widget.NewLabel(fmt.Sprintf("Влажность: %d%%", res.Main.Humidity)),
 		),
+		widget.NewButton("Поменять город", func() {
+			window2 := app.NewWindow("Выбор города")
+			window2.Resize(fyne.NewSize(265, 115))
+			window2.SetFixedSize(true)
+
+			inputCity := widget.NewEntry()
+
+			window2.SetContent(container.NewVBox(
+				widget.NewLabel("Введите Ваш город:"),
+				inputCity,
+				widget.NewButton("Обновить", func() {
+					fmt.Println(inputCity.Text)
+					//Запрос апи
+					window2.Hide()
+				}),
+			))
+			window2.Show()
+		}),
 	)
 
 	_, monthRes, dayRes := time.Unix(int64(res.Dt), 0).Date()
@@ -103,5 +120,6 @@ func InitUI(res *owm.CurrentWeatherData, forecast *api.WeatherForecast) {
 		panelBottom,
 	))
 
-	window.ShowAndRun()
+	window.Show()
+	app.Run()
 }
