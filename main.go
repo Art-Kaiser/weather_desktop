@@ -12,11 +12,11 @@ func main() {
 
 	if apiKey, exists := os.LookupEnv("API_WEATHER_KEY"); exists {
 		forecast := new(api.WeatherForecast)
-		sity := new(api.CoordinatesCity)
+		city := new(api.CoordinatesCity)
 		//test api
 		res := api.GetWeatherResult(apiKey)
 		api.GetWeathersResult(apiKey, forecast)
-		api.GetCoordinatesCity(apiKey, "Moskow", sity)
+		api.GetCoordinatesCity(apiKey, "Moskow", city)
 		scripts.InitUI(res, forecast)
 	}
 }
