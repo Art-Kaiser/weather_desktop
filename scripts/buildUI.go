@@ -7,17 +7,12 @@ import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
-	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 	owm "github.com/briandowns/openweathermap"
 	"math"
 	"time"
 	"weatherDesktop/api"
 )
-
-func FahrenheitCelsius(f float64) float64 {
-	return (f - 32) * 5 / 9
-}
 
 func InitUI(res *owm.CurrentWeatherData, forecast *api.WeatherForecast) {
 	app := app.New()
@@ -27,8 +22,6 @@ func InitUI(res *owm.CurrentWeatherData, forecast *api.WeatherForecast) {
 
 	iconApp, _ := fyne.LoadResourceFromPath("./assets/icon.png")
 
-	img := canvas.NewImageFromResource(theme.FyneLogo())
-	img.FillMode = canvas.ImageFillOriginal
 	//text := canvas.NewText("Overlay", color.Black)
 
 	weatherIcon := container.NewGridWrap(
@@ -41,7 +34,7 @@ func InitUI(res *owm.CurrentWeatherData, forecast *api.WeatherForecast) {
 	contentCenter := container.New(layout.NewCenterLayout(), weatherIcon)
 
 	weatherIconWrapper := container.NewGridWrap(
-		fyne.NewSize(250, 150),
+		fyne.NewSize(375, 150),
 		contentCenter,
 	)
 
