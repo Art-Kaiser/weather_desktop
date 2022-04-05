@@ -14,7 +14,7 @@ import (
 	"weatherDesktop/api"
 )
 
-func InitUI(res *owm.CurrentWeatherData, forecast *api.WeatherForecast) {
+func InitUI(res *owm.CurrentWeatherData, forecast *api.WeatherForecast, input *widget.Entry) {
 	app := app.New()
 	window := app.NewWindow("Watch the weather")
 	window.Resize(fyne.NewSize(550, 450))
@@ -39,6 +39,7 @@ func InitUI(res *owm.CurrentWeatherData, forecast *api.WeatherForecast) {
 
 	window.SetIcon(iconApp)
 
+	//inputCity := widget.NewEntry()
 	leftBox := container.NewVBox(
 		container.NewHBox(
 			widget.NewLabel(fmt.Sprintf("Погодные условия: %s", res.Weather[0].Description)),
@@ -57,13 +58,11 @@ func InitUI(res *owm.CurrentWeatherData, forecast *api.WeatherForecast) {
 			window2.Resize(fyne.NewSize(265, 115))
 			window2.SetFixedSize(true)
 
-			inputCity := widget.NewEntry()
-
 			window2.SetContent(container.NewVBox(
 				widget.NewLabel("Введите Ваш город:"),
-				inputCity,
+				input,
 				widget.NewButton("Обновить", func() {
-					fmt.Println(inputCity.Text)
+
 					//Запрос апи
 					window2.Hide()
 				}),
@@ -106,12 +105,11 @@ func InitUI(res *owm.CurrentWeatherData, forecast *api.WeatherForecast) {
 				weatherBottomIcon,
 			),
 		)
-
 		bottomBox.Add(weatherGroup)
 	}
 
 	panelBottom := container.NewGridWrap(
-		fyne.NewSize(600, 225),
+		fyne.NewSize(750, 225),
 		container.NewHScroll(bottomBox),
 	)
 
@@ -119,6 +117,14 @@ func InitUI(res *owm.CurrentWeatherData, forecast *api.WeatherForecast) {
 		panelTop,
 		panelBottom,
 	))
+
+	go func() {
+		for range time.Tick(time.Minute) {
+			//для запросов по текущему дню
+			//formatted := time.Now().Format("It`s: 3:04:05")
+			fmt.Println("inputCity.Text: ", input.Text)
+		}
+	}()
 
 	window.Show()
 	app.Run()

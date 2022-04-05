@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fyne.io/fyne/v2/widget"
 	"os"
 	"weatherDesktop/api"
 	"weatherDesktop/configs"
@@ -14,9 +15,19 @@ func main() {
 		forecast := new(api.WeatherForecast)
 		city := new(api.CoordinatesCity)
 		//test api
-		res := api.GetWeatherResult(apiKey)
+
 		api.GetWeathersResult(apiKey, forecast)
 		api.GetCoordinatesCity(apiKey, "Moskow", city)
-		scripts.InitUI(res, forecast)
+
+		inputCity := widget.NewEntry()
+		res := api.GetWeatherResult(apiKey, inputCity)
+		scripts.InitUI(res, forecast, inputCity)
+
+		/*go func() {
+			for range time.Tick(time.Minute) {
+				resTest := api.GetWeatherResult(apiKey, inputCity)
+				scripts.InitUI(resTest, forecast, inputCity)
+			}
+		}()*/
 	}
 }
