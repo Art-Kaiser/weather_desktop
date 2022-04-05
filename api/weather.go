@@ -7,13 +7,19 @@ import (
 	owm "github.com/briandowns/openweathermap"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
 var myClient = &http.Client{Timeout: 10 * time.Second}
 
-func GetWeatherResult(apiKey string, inputCity *widget.Entry) *owm.CurrentWeatherData {
-	weather, err := owm.NewCurrent("C", "ru", apiKey)
+//test
+
+func GetWeatherResult(_ string, inputCity *widget.Entry) *owm.CurrentWeatherData {
+
+	apiKey2, _ := os.LookupEnv("API_WEATHER_KEY")
+
+	weather, err := owm.NewCurrent("C", "ru", apiKey2)
 	if err != nil {
 		log.Fatalln(err)
 	}
