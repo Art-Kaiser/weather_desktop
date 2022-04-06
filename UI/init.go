@@ -1,4 +1,4 @@
-package scripts
+package UI
 
 import (
 	"fmt"
@@ -114,7 +114,7 @@ func renderPanelBottom(forecast *api.WeatherForecast) *fyne.Container {
 	return panelBottom
 }
 
-func InitUI(res *owm.CurrentWeatherData, forecast *api.WeatherForecast, input *widget.Entry) {
+func Init(res *owm.CurrentWeatherData, forecast *api.WeatherForecast, input *widget.Entry) {
 	app := app.New()
 	window := app.NewWindow("Watch the weather")
 	window.Resize(fyne.NewSize(550, 450))

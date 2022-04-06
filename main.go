@@ -3,9 +3,9 @@ package main
 import (
 	"fyne.io/fyne/v2/widget"
 	"os"
+	"weatherDesktop/UI"
 	"weatherDesktop/api"
 	"weatherDesktop/configs"
-	"weatherDesktop/scripts"
 )
 
 func main() {
@@ -21,7 +21,7 @@ func main() {
 
 		inputCity := widget.NewEntry()
 		res := api.GetWeatherResult(apiKey, inputCity)
-		scripts.InitUI(res, forecast, inputCity)
+		UI.Init(res, forecast, inputCity)
 
 		/*go func() {
 			for range time.Tick(time.Minute) {
