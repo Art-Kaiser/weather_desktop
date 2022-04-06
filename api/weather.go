@@ -15,11 +15,9 @@ var myClient = &http.Client{Timeout: 10 * time.Second}
 
 //test
 
-func GetWeatherResult(_ string, inputCity *widget.Entry) *owm.CurrentWeatherData {
-
-	apiKey2, _ := os.LookupEnv("API_WEATHER_KEY")
-
-	weather, err := owm.NewCurrent("C", "ru", apiKey2)
+func GetWeatherResult(inputCity *widget.Entry) *owm.CurrentWeatherData {
+	apiKey, _ := os.LookupEnv("API_WEATHER_KEY")
+	weather, err := owm.NewCurrent("C", "ru", apiKey)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -30,7 +28,8 @@ func GetWeatherResult(_ string, inputCity *widget.Entry) *owm.CurrentWeatherData
 	return weather
 }
 
-func GetWeathersResult(apiKey string, result *WeatherForecast) error {
+func GetWeathersResult(result *WeatherForecast) error {
+	apiKey, _ := os.LookupEnv("API_WEATHER_KEY")
 	//test coordinates
 	res, err := myClient.Get(fmt.Sprintf("https://api.openweathermap.org/data/2.5/onecall?lat=55.744458375950536&lon=37.62184820096254&lang=ru&units=metric&exclude=minutely,hourly,current,alerts&appid=%s", apiKey))
 	if err != nil {
@@ -40,7 +39,8 @@ func GetWeathersResult(apiKey string, result *WeatherForecast) error {
 	return json.NewDecoder(res.Body).Decode(result)
 }
 
-func GetCoordinatesCity(apiKey, location string, result *CoordinatesCity) error {
+func GetCoordinatesCity(location string, result *CoordinatesCity) error {
+	apiKey, _ := os.LookupEnv("API_WEATHER_KEY")
 	res, err := myClient.Get(fmt.Sprintf("http://api.openweathermap.org/geo/1.0/direct?&appid=%s&q=%s", apiKey, location))
 	if err != nil {
 		log.Fatalln(err)
