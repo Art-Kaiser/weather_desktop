@@ -46,7 +46,7 @@ func renderPanelTop(res *owm.CurrentWeatherData, app fyne.App, input *widget.Ent
 		container.NewHBox(
 			widget.NewLabel(fmt.Sprintf("Влажность: %d%%", res.Main.Humidity)),
 		),
-		widget.NewButton("Поменять город", func() {
+		/*widget.NewButton("Поменять город", func() {
 			window2 := app.NewWindow("Выбор города")
 			window2.Resize(fyne.NewSize(265, 115))
 			window2.SetFixedSize(true)
@@ -61,7 +61,7 @@ func renderPanelTop(res *owm.CurrentWeatherData, app fyne.App, input *widget.Ent
 				}),
 			))
 			window2.Show()
-		}),
+		}),*/
 	)
 
 	_, monthRes, dayRes := time.Unix(int64(res.Dt), 0).Date()
@@ -124,9 +124,27 @@ func Init(res *owm.CurrentWeatherData, forecast *api.WeatherForecast, input *wid
 	if err != nil {
 		window.SetIcon(iconApp)
 	}
+	
+	buttonChoiceCity := widget.NewButton("Поменять город", func() {
+		window2 := app.NewWindow("Выбор города")
+		window2.Resize(fyne.NewSize(265, 115))
+		window2.SetFixedSize(true)
+
+		window2.SetContent(container.NewVBox(
+			widget.NewLabel("Введите Ваш город:"),
+			input,
+			widget.NewButton("Обновить", func() {
+				//Запрос апи
+				window2.Hide()
+			}),
+		))
+
+		window2.Show()
+	})
 
 	window.SetContent(container.NewVBox(
 		renderPanelTop(res, app, input),
+		buttonChoiceCity,
 		renderPanelBottom(forecast),
 	))
 
