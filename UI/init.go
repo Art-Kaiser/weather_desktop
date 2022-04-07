@@ -40,7 +40,7 @@ func renderPanelTop(res *owm.CurrentWeatherData, input *widget.Entry) *widget.Ca
 			widget.NewLabel(fmt.Sprintf("Погодные условия: %s", res.Weather[0].Description)),
 		),
 		container.NewHBox(
-			widget.NewLabel(fmt.Sprintf("Температура: %v C°", math.Round(res.Main.Temp))),
+			widget.NewLabel(fmt.Sprintf("Температура: %v°", math.Round(res.Main.Temp))),
 		),
 		container.NewHBox(
 			widget.NewLabel(fmt.Sprintf("Ветер: %v м/сек", math.Round(res.Wind.Speed))),
@@ -80,7 +80,11 @@ func renderPanelBottom(forecast *api.WeatherForecast) *fyne.Container {
 			container.NewHBox(
 				container.NewVBox(
 					widget.NewLabel(fmt.Sprintf("Погодные условия: %s", forecast.Daily[i].Weather[0].Description)),
-					widget.NewLabel(fmt.Sprintf("Температура: %v °C", math.Round(forecast.Daily[i].Temp.Day))),
+					widget.NewLabel(fmt.Sprintf(
+						"Температура днём: %v°. Ночью: %v°",
+						math.Round(forecast.Daily[i].Temp.Day),
+						math.Round(forecast.Daily[i].Temp.Night),
+					)),
 					widget.NewLabel(fmt.Sprintf("Ветер: %v м/сек", math.Round(forecast.Daily[i].WindSpeed))),
 					widget.NewLabel(fmt.Sprintf("Влажность: %d%%", forecast.Daily[i].Humidity)),
 				),
