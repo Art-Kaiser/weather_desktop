@@ -102,13 +102,23 @@ func renderPanelBottom(forecast *api.WeatherForecast) *fyne.Container {
 	return panelBottom
 }
 
-func renderBaseWindow(res *owm.CurrentWeatherData, forecast *api.WeatherForecast, input *widget.Entry, buttonChoiceCity *widget.Button) *fyne.Container {
+func renderBaseWindow(data Data, component Component) *fyne.Container {
 	content := container.NewVBox(
-		renderPanelTop(res, input),
-		buttonChoiceCity,
-		renderPanelBottom(forecast),
+		renderPanelTop(data.res, component.input),
+		component.button,
+		renderPanelBottom(data.forecast),
 	)
 	return content
+}
+
+type Data struct {
+	res      *owm.CurrentWeatherData
+	forecast *api.WeatherForecast
+}
+
+type Component struct {
+	input  *widget.Entry
+	button *widget.Button
 }
 
 func Init(res *owm.CurrentWeatherData, forecast *api.WeatherForecast, input *widget.Entry) {
@@ -136,14 +146,17 @@ func Init(res *owm.CurrentWeatherData, forecast *api.WeatherForecast, input *wid
 		dialogChoiceCity.Show()
 	})
 
+	data := Data{res: res, forecast: forecast}
+	component := Component{input: input, button: buttonChoiceCity}
+
 	window.SetContent(
-		renderBaseWindow(res, forecast, input, buttonChoiceCity),
+		renderBaseWindow(data, component),
 	)
 
 	dialogChoiceCity.SetOnClosed(func() {
 		if len(input.Text) != 0 {
 			window.SetContent(
-				renderBaseWindow(res, forecast, input, buttonChoiceCity),
+				renderBaseWindow(data, component),
 			)
 		}
 	})
