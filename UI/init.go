@@ -98,9 +98,18 @@ func renderPanelBottom(forecast *api.WeatherForecast) *fyne.Container {
 	return panelBottom
 }
 
+func renderBaseWindow(res *owm.CurrentWeatherData, forecast *api.WeatherForecast, input *widget.Entry, buttonChoiceCity *widget.Button) *fyne.Container {
+	content := container.NewVBox(
+		renderPanelTop(res, input),
+		buttonChoiceCity,
+		renderPanelBottom(forecast),
+	)
+	return content
+}
+
 func Init(res *owm.CurrentWeatherData, forecast *api.WeatherForecast, input *widget.Entry) {
 	app := app.New()
-	window := app.NewWindow("Watch the weather")
+	window := app.NewWindow("Следите за погодой")
 
 	window.Resize(fyne.NewSize(550, 450))
 	window.SetFixedSize(true)
@@ -111,62 +120,33 @@ func Init(res *owm.CurrentWeatherData, forecast *api.WeatherForecast, input *wid
 		window.SetIcon(iconApp)
 	}
 
-	dialogChoiceCity := dialog.NewCustomConfirm(
+	dialogChoiceCity := dialog.NewCustom(
 		"Выбор города",
 		"Сохранить",
-		"Отклонить",
 		input,
-		func(b bool) {
-			if b {
-				fmt.Println("input:", input.Text)
-				window.SetContent(renderPanelTop(res, input))
-			}
-		},
 		window,
 	)
-
 	dialogChoiceCity.Resize(fyne.NewSize(265, 115))
 
 	buttonChoiceCity := widget.NewButton("Поменять город", func() {
 		dialogChoiceCity.Show()
 	})
 
-	content := container.NewVBox(
-		renderPanelTop(res, input),
-		buttonChoiceCity,
-		renderPanelBottom(forecast),
+	window.SetContent(
+		renderBaseWindow(res, forecast, input, buttonChoiceCity),
 	)
 
-	window.SetContent(content)
-
 	dialogChoiceCity.SetOnClosed(func() {
-		//	fmt.Println(input.Text)
-		//	window.SetContent(content)
+		if len(input.Text) != 0 {
+			window.SetContent(
+				renderBaseWindow(res, forecast, input, buttonChoiceCity),
+			)
+		}
 	})
 
-	go func() {
+	/*go func() {
 		for range time.Tick(time.Minute * 10) {
 			fmt.Println("test: ", time.Minute*10)
-		}
-	}()
-
-	/*go func() {
-		for range time.Tick(time.Minute) {
-			//для запросов по текущему дню
-			//formatted := time.Now().Format("It`s: 3:04:05")
-			fmt.Println("inputCity.Text: ", input.Text)
-			resTest := api.GetWeatherResult("", input)
-
-			window.SetContent(container.NewVBox(
-				//panelTop,
-				renderPanelTop(resTest, app, input),
-				panelBottom,
-			))
-		}
-	}()*/
-	/*go func() {
-		for range time.Tick(time.Second) {
-			fmt.Println("test: ", time.Second)
 		}
 	}()*/
 
