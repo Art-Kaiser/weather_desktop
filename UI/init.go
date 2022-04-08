@@ -159,6 +159,17 @@ func Init(res *owm.CurrentWeatherData, forecast *api.WeatherForecast, input *wid
 				renderBaseWindow(data, component),
 			)
 		}
+
+		//тест в случае ошибки
+		var errTest bool = true
+
+		if errTest {
+			dialog.ShowInformation(
+				"Внимание!",
+				"Произошла ошибка при получении данных о погоде. \n Вероятно это может быть связано с некорректным заполнением поля\n  или сторонней ошибкой",
+				window,
+			)
+		}
 	})
 
 	/*go func() {
