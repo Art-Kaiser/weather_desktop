@@ -23,12 +23,15 @@ func renderPanelBottom(forecast *api.WeatherForecast) *fyne.Container {
 		)
 		_, month, day := time.Unix(int64(forecast.Daily[i].Dt), 0).Date()
 
+		weatherConditions := widget.NewLabel(fmt.Sprintf("Погодные условия: %s", forecast.Daily[i].Weather[0].Description))
+		weatherConditions.Wrapping = fyne.TextWrapWord
+
 		weatherGroup := widget.NewCard(
 			fmt.Sprintf("Дата: %s %v", month, day),
 			"",
 			container.NewHBox(
 				container.NewVBox(
-					widget.NewLabel(fmt.Sprintf("Погодные условия: %s", forecast.Daily[i].Weather[0].Description)),
+					weatherConditions,
 					widget.NewLabel(fmt.Sprintf(
 						"Температура днём: %v°. Ночью: %v°",
 						math.Round(forecast.Daily[i].Temp.Day),
@@ -41,14 +44,14 @@ func renderPanelBottom(forecast *api.WeatherForecast) *fyne.Container {
 			),
 		)
 		weatherWrapper := container.NewGridWrap(
-			fyne.NewSize(550, 225),
-			container.NewCenter(weatherGroup),
+			fyne.NewSize(415, 235),
+			container.NewGridWithColumns(1, weatherGroup),
 		)
 		bottomBox.Add(weatherWrapper)
 	}
 
 	panelBottom := container.NewGridWrap(
-		fyne.NewSize(750, 225),
+		fyne.NewSize(750, 235),
 		container.NewHScroll(bottomBox),
 	)
 
