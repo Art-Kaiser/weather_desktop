@@ -38,13 +38,3 @@ func GetWeathersResult(result *WeatherForecast, coordinates owm.Coordinates) err
 	defer res.Body.Close()
 	return json.NewDecoder(res.Body).Decode(result)
 }
-
-func GetCoordinatesCity(location string, result *CoordinatesCity) error {
-	apiKey, _ := os.LookupEnv("API_WEATHER_KEY")
-	res, err := myClient.Get(fmt.Sprintf("http://api.openweathermap.org/geo/1.0/direct?&appid=%s&q=%s", apiKey, location))
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer res.Body.Close()
-	return json.NewDecoder(res.Body).Decode(result)
-}
