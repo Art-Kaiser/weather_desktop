@@ -20,7 +20,7 @@ type Component struct {
 
 func renderBaseWindow(data Data, component Component) *fyne.Container {
 	content := container.NewVBox(
-		renderPanelTop(data.res, component.input),
+		renderPanelTop(data.res),
 		component.button,
 		renderPanelBottom(data.forecast),
 	)
