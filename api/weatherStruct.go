@@ -46,9 +46,9 @@ type WeatherForecast struct {
 	} `json:"daily"`
 }
 
-type CoordinatesCity []city
+type CoordinatesCity []City
 
-type city struct {
+type City struct {
 	Name       string `json:"name"`
 	LocalNames struct {
 		Fa          string `json:"fa"`

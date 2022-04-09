@@ -121,7 +121,8 @@ type Component struct {
 	button *widget.Button
 }
 
-func Init(res *owm.CurrentWeatherData, forecast *api.WeatherForecast, input *widget.Entry) {
+func Init(forecast *api.WeatherForecast, input *widget.Entry) {
+	res := api.GetWeatherResult(input.Text)
 	app := app.New()
 	window := app.NewWindow("Следите за погодой")
 
@@ -155,28 +156,31 @@ func Init(res *owm.CurrentWeatherData, forecast *api.WeatherForecast, input *wid
 
 	dialogChoiceCity.SetOnClosed(func() {
 		if len(input.Text) != 0 {
+			resUpdate := api.GetWeatherResult(input.Text)
+			//	coordinates := new(api.CoordinatesCity)
+
+			//	api.GetCoordinatesCity(input.Text, coordinates)
+			//	fmt.Println("coordinates: ", coordinates)
+			/*Lat
+			Lon
+			Country*/
+			dataUpdate := Data{res: resUpdate, forecast: forecast}
+
 			window.SetContent(
-				renderBaseWindow(data, component),
+				renderBaseWindow(dataUpdate, component),
 			)
-		}
 
-		//тест в случае ошибки
-		var errTest bool = true
-
-		if errTest {
-			dialog.ShowInformation(
-				"Внимание!",
-				"Произошла ошибка при получении данных о погоде. \n Вероятно это может быть связано с некорректным заполнением поля\n  или сторонней ошибкой",
-				window,
-			)
+			/*if err != nil {
+				dialog.ShowInformation(
+					"Внимание!",
+					"Произошла ошибка при получении данных о погоде. "+
+						"\n Вероятно это может быть связано с некорректным заполнением поля"+
+						"\n  или сторонней ошибкой",
+					window,
+				)
+			}*/
 		}
 	})
-
-	/*go func() {
-		for range time.Tick(time.Minute * 10) {
-			fmt.Println("test: ", time.Minute*10)
-		}
-	}()*/
 
 	window.Show()
 	app.Run()
