@@ -17,7 +17,7 @@ func Init(input *widget.Entry) {
 	app := app.New()
 	window := app.NewWindow("Следите за погодой")
 
-	window.Resize(fyne.NewSize(550, 450))
+	window.Resize(fyne.NewSize(550, 470))
 	window.SetFixedSize(true)
 	window.SetMaster()
 

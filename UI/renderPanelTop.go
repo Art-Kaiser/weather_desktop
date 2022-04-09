@@ -31,7 +31,6 @@ func renderIconWeather(res *owm.CurrentWeatherData) *fyne.Container {
 }
 
 func renderPanelTop(res *owm.CurrentWeatherData, input *widget.Entry) *widget.Card {
-	fmt.Println("input render top: ", input.Text)
 	leftBox := container.NewVBox(
 		container.NewHBox(
 			widget.NewLabel(fmt.Sprintf("Погодные условия: %s", res.Weather[0].Description)),
