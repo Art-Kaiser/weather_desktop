@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"fyne.io/fyne/v2/widget"
 	owm "github.com/briandowns/openweathermap"
 	"log"
 	"net/http"
@@ -15,7 +14,7 @@ var myClient = &http.Client{Timeout: 10 * time.Second}
 
 //test
 
-func GetWeatherResult(inputCity *widget.Entry) *owm.CurrentWeatherData {
+func GetWeatherResult(inputCity string) *owm.CurrentWeatherData {
 	apiKey, _ := os.LookupEnv("API_WEATHER_KEY")
 	weather, err := owm.NewCurrent("C", "ru", apiKey)
 	if err != nil {
@@ -23,7 +22,7 @@ func GetWeatherResult(inputCity *widget.Entry) *owm.CurrentWeatherData {
 	}
 	//test location inputCity
 
-	weather.CurrentByName(fmt.Sprintf("%s, RU", inputCity.Text))
+	weather.CurrentByName(fmt.Sprintf("%s, RU", inputCity))
 	fmt.Println("weather: ", weather)
 	return weather
 }

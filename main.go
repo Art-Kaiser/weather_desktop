@@ -13,15 +13,15 @@ func main() {
 
 	if _, exists := os.LookupEnv("API_WEATHER_KEY"); exists {
 		forecast := new(api.WeatherForecast)
-		city := new(api.CoordinatesCity)
+		//	city := new(api.CoordinatesCity)
 		//test api
 
 		api.GetWeathersResult(forecast)
-		api.GetCoordinatesCity("Moskow", city)
+		//	api.GetCoordinatesCity("Moskow", city)
 
 		inputCity := widget.NewEntry()
-		res := api.GetWeatherResult(inputCity)
+		//res := api.GetWeatherResult(inputCity)
 
-		UI.Init(res, forecast, inputCity)
+		UI.Init(forecast, inputCity)
 	}
 }
