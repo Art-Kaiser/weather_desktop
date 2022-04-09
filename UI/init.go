@@ -9,8 +9,11 @@ import (
 	"weatherDesktop/api"
 )
 
-func Init(forecast *api.WeatherForecast, input *widget.Entry) {
+func Init(input *widget.Entry) {
+	weathersResult := new(api.WeatherForecast)
 	res := api.GetWeatherResult(input.Text)
+	api.GetWeathersResult(weathersResult, res.GeoPos)
+
 	app := app.New()
 	window := app.NewWindow("Следите за погодой")
 
@@ -35,7 +38,7 @@ func Init(forecast *api.WeatherForecast, input *widget.Entry) {
 		dialogChoiceCity.Show()
 	})
 
-	data := Data{res: res, forecast: forecast}
+	data := Data{res: res, forecast: weathersResult}
 	component := Component{input: input, button: buttonChoiceCity}
 
 	window.SetContent(
@@ -44,15 +47,12 @@ func Init(forecast *api.WeatherForecast, input *widget.Entry) {
 
 	dialogChoiceCity.SetOnClosed(func() {
 		if len(input.Text) != 0 {
-			resUpdate := api.GetWeatherResult(input.Text)
-			//	coordinates := new(api.CoordinatesCity)
+			forecastUpdate := new(api.WeatherForecast)
 
-			//	api.GetCoordinatesCity(input.Text, coordinates)
-			//	fmt.Println("coordinates: ", coordinates)
-			/*Lat
-			Lon
-			Country*/
-			dataUpdate := Data{res: resUpdate, forecast: forecast}
+			resUpdate := api.GetWeatherResult(input.Text)
+			api.GetWeathersResult(forecastUpdate, resUpdate.GeoPos)
+
+			dataUpdate := Data{res: resUpdate, forecast: forecastUpdate}
 
 			window.SetContent(
 				renderBaseWindow(dataUpdate, component),
@@ -73,7 +73,7 @@ func Init(forecast *api.WeatherForecast, input *widget.Entry) {
 	go func() {
 		for range time.Tick(time.Minute) {
 			res = api.GetWeatherResult(input.Text)
-			data = Data{res: res, forecast: forecast}
+			data = Data{res: res, forecast: weathersResult}
 
 			window.SetContent(
 				renderBaseWindow(data, component),
