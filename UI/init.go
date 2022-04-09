@@ -47,12 +47,10 @@ func Init(input *widget.Entry) {
 
 	dialogChoiceCity.SetOnClosed(func() {
 		if len(input.Text) != 0 {
-			forecastUpdate := new(api.WeatherForecast)
-
 			resUpdate := api.GetWeatherResult(input.Text)
-			api.GetWeathersResult(forecastUpdate, resUpdate.GeoPos)
+			api.GetWeathersResult(weathersResult, resUpdate.GeoPos)
 
-			dataUpdate := Data{res: resUpdate, forecast: forecastUpdate}
+			dataUpdate := Data{res: resUpdate, forecast: weathersResult}
 
 			window.SetContent(
 				renderBaseWindow(dataUpdate, component),
@@ -71,13 +69,25 @@ func Init(input *widget.Entry) {
 	})
 
 	go func() {
+		count := 0
 		for range time.Tick(time.Minute) {
+			count++
 			res = api.GetWeatherResult(input.Text)
 			data = Data{res: res, forecast: weathersResult}
 
 			window.SetContent(
 				renderBaseWindow(data, component),
 			)
+
+			if count%10 == 0 {
+				api.GetWeathersResult(weathersResult, res.GeoPos)
+				data = Data{res: res, forecast: weathersResult}
+
+				window.SetContent(
+					renderBaseWindow(data, component),
+				)
+				count = 0
+			}
 		}
 	}()
 
