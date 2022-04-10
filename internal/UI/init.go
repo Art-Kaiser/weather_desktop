@@ -80,7 +80,7 @@ func Init() {
 			res = api.GetWeatherResult(input.Text)
 
 			if len(res.Weather) == 0 {
-				return
+				continue
 			}
 
 			data = Data{res: res, forecast: weathersResult}
