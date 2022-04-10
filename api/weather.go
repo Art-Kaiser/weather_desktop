@@ -12,8 +12,6 @@ import (
 
 var myClient = &http.Client{Timeout: 10 * time.Second}
 
-//test
-
 func GetWeatherResult(inputCity string) *owm.CurrentWeatherData {
 	apiKey, _ := os.LookupEnv("API_WEATHER_KEY")
 	weather, err := owm.NewCurrent("C", "ru", apiKey)
