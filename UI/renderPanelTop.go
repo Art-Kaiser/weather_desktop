@@ -32,6 +32,10 @@ func renderIconWeather(res *owm.CurrentWeatherData) *fyne.Container {
 }
 
 func renderPanelTop(res *owm.CurrentWeatherData) *widget.Card {
+	_, month, day := time.Unix(int64(res.Dt), 0).Date()
+	updateTime := time.Unix(int64(res.Dt), 0).Format("15:04")
+	monthRu := formatRu.Format(month.String(), false)
+
 	leftBox := container.NewVBox(
 		container.NewHBox(
 			widget.NewLabel(fmt.Sprintf("Погодные условия: %s", res.Weather[0].Description)),
@@ -47,16 +51,9 @@ func renderPanelTop(res *owm.CurrentWeatherData) *widget.Card {
 		),
 	)
 
-	_, monthRes, dayRes := time.Unix(int64(res.Dt), 0).Date()
-
-	updateTime := time.Unix(int64(res.Dt), 0).Format("15:04")
-	//nowTime := time.Now().Format("15:04")
-
-	str := formatRu.Format(monthRes.String(), false)
-
 	panelTop := widget.NewCard(
 		fmt.Sprintf("%s. Обновлено в: %s по МСК", res.Name, updateTime),
-		fmt.Sprintf("Дата: %s %v", str, dayRes),
+		fmt.Sprintf("Дата: %s %v", monthRu, day),
 		container.NewHBox(
 			leftBox,
 			renderIconWeather(res),
