@@ -56,10 +56,19 @@ func Init(input *widget.Entry) {
 
 	dialogChoiceCity.SetOnClosed(func() {
 		if len(input.Text) != 0 {
-			resUpdate := api.GetWeatherResult(input.Text)
-			api.GetWeathersResult(weathersResult, resUpdate.GeoPos)
+			res = api.GetWeatherResult(input.Text)
 
-			dataUpdate := Data{res: resUpdate, forecast: weathersResult}
+			if len(res.Weather) == 0 {
+				renderPopupInfo("Произошла ошибка при получении данных о погоде. "+
+					"\n Вероятно это может быть связано с некорректным заполнением поля"+
+					"\n  или сторонней ошибкой",
+					window)
+				return
+			}
+
+			api.GetWeathersResult(weathersResult, res.GeoPos)
+
+			dataUpdate := Data{res: res, forecast: weathersResult}
 
 			window.SetContent(
 				renderBaseWindow(dataUpdate, component),
