@@ -10,6 +10,7 @@ import (
 	owm "github.com/briandowns/openweathermap"
 	"math"
 	"time"
+	"weatherDesktop/pkg/formatRu"
 )
 
 func renderIconWeather(res *owm.CurrentWeatherData) *fyne.Container {
@@ -47,13 +48,15 @@ func renderPanelTop(res *owm.CurrentWeatherData) *widget.Card {
 	)
 
 	_, monthRes, dayRes := time.Unix(int64(res.Dt), 0).Date()
-	
+
 	updateTime := time.Unix(int64(res.Dt), 0).Format("15:04")
 	nowTime := time.Now().Format("15:04")
 
+	str := formatRu.Format(monthRes.String(), false)
+
 	panelTop := widget.NewCard(
 		fmt.Sprintf("Местоположение: %s. Обновлено в: %s", res.Name, updateTime),
-		fmt.Sprintf("Дата: %s %v, %s", monthRes, dayRes, nowTime),
+		fmt.Sprintf("Дата: %s %v, %s", str, dayRes, nowTime),
 		container.NewHBox(
 			leftBox,
 			renderIconWeather(res),

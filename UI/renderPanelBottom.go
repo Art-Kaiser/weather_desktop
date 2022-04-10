@@ -9,6 +9,7 @@ import (
 	"math"
 	"time"
 	"weatherDesktop/api"
+	"weatherDesktop/pkg/formatRu"
 )
 
 func renderPanelBottom(forecast *api.WeatherForecast) *fyne.Container {
@@ -22,12 +23,16 @@ func renderPanelBottom(forecast *api.WeatherForecast) *fyne.Container {
 			),
 		)
 		_, month, day := time.Unix(int64(forecast.Daily[i].Dt), 0).Date()
+		weekday := time.Unix(int64(forecast.Daily[i].Dt), 0).Weekday()
+
+		strMonth := formatRu.Format(month.String(), true)
+		strWeekday := formatRu.Format(weekday.String(), true)
 
 		weatherConditions := widget.NewLabel(fmt.Sprintf("Погодные условия: %s", forecast.Daily[i].Weather[0].Description))
 		weatherConditions.Wrapping = fyne.TextWrapWord
 
 		weatherGroup := widget.NewCard(
-			fmt.Sprintf("Дата: %s %v", month, day),
+			fmt.Sprintf("Дата: %s %v %s", strWeekday, day, strMonth),
 			"",
 			container.NewHBox(
 				container.NewVBox(
