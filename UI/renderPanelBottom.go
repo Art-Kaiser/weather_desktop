@@ -49,7 +49,7 @@ func renderPanelBottom(forecast *api.WeatherForecast) *fyne.Container {
 			),
 		)
 		weatherWrapper := container.NewGridWrap(
-			fyne.NewSize(425, 235),
+			fyne.NewSize(445, 235),
 			container.NewGridWithColumns(1, weatherGroup),
 		)
 		bottomBox.Add(weatherWrapper)
