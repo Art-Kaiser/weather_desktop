@@ -2,8 +2,8 @@ package main
 
 import (
 	"os"
-	"weatherDesktop/UI"
 	"weatherDesktop/configs"
+	"weatherDesktop/internal/UI"
 )
 
 func main() {
