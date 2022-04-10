@@ -5,6 +5,7 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
+	"os"
 	"time"
 	"weatherDesktop/api"
 )
@@ -16,6 +17,14 @@ func Init(input *widget.Entry) {
 
 	app := app.New()
 	window := app.NewWindow("Следите за погодой")
+
+	if _, exists := os.LookupEnv("API_WEATHER_KEY"); !exists {
+		renderPopupInfo("Добавте в config файл .env с вашим API ключом.\n API_WEATHER_KEY=Ваш ключ", window)
+	}
+
+	/*renderPopupInfo("Произошла ошибка при получении данных о погоде. "+
+	"\n Вероятно это может быть связано с некорректным заполнением поля"+
+	"\n  или сторонней ошибкой", window)*/
 
 	window.Resize(fyne.NewSize(550, 470))
 	window.SetFixedSize(true)
@@ -55,16 +64,6 @@ func Init(input *widget.Entry) {
 			window.SetContent(
 				renderBaseWindow(dataUpdate, component),
 			)
-
-			/*if err != nil {
-				dialog.ShowInformation(
-					"Внимание!",
-					"Произошла ошибка при получении данных о погоде. "+
-						"\n Вероятно это может быть связано с некорректным заполнением поля"+
-						"\n  или сторонней ошибкой",
-					window,
-				)
-			}*/
 		}
 	})
 
