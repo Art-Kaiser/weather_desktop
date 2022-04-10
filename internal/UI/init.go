@@ -16,7 +16,7 @@ func Init() {
 	window.Resize(fyne.NewSize(550, 470))
 	window.SetFixedSize(true)
 	window.SetMaster()
-	
+
 	input := widget.NewEntry()
 
 	iconApp, err := fyne.LoadResourceFromPath("./assets/icon.png")
@@ -78,6 +78,11 @@ func Init() {
 		for range time.Tick(time.Minute) {
 			count++
 			res = api.GetWeatherResult(input.Text)
+
+			if len(res.Weather) == 0 {
+				continue
+			}
+
 			data = Data{res: res, forecast: weathersResult}
 
 			window.SetContent(
