@@ -10,30 +10,27 @@ import (
 	"weatherDesktop/api"
 )
 
-func Init(input *widget.Entry) {
-	weathersResult := new(api.WeatherForecast)
-	res := api.GetWeatherResult(input.Text)
-	api.GetWeathersResult(weathersResult, res.GeoPos)
-
+func Init() {
 	app := app.New()
 	window := app.NewWindow("Следите за погодой")
-
-	if _, exists := os.LookupEnv("API_WEATHER_KEY"); !exists {
-		renderPopupInfo("Добавте в config файл .env с вашим API ключом.\n API_WEATHER_KEY=Ваш ключ", window)
-	}
-
-	/*renderPopupInfo("Произошла ошибка при получении данных о погоде. "+
-	"\n Вероятно это может быть связано с некорректным заполнением поля"+
-	"\n  или сторонней ошибкой", window)*/
-
 	window.Resize(fyne.NewSize(550, 470))
 	window.SetFixedSize(true)
 	window.SetMaster()
+	
+	input := widget.NewEntry()
 
 	iconApp, err := fyne.LoadResourceFromPath("./assets/icon.png")
 	if err != nil {
 		window.SetIcon(iconApp)
 	}
+
+	if _, exists := os.LookupEnv("API_WEATHER_KEY"); !exists {
+		renderPopupInfo("Добавте в config файл .env с вашим API ключом.\n API_WEATHER_KEY=Ваш ключ", window)
+	}
+
+	weathersResult := new(api.WeatherForecast)
+	res := api.GetWeatherResult(input.Text)
+	api.GetWeathersResult(weathersResult, res.GeoPos)
 
 	dialogChoiceCity := dialog.NewCustom(
 		"Выбор города",

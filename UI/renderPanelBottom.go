@@ -14,25 +14,25 @@ import (
 
 func renderPanelBottom(forecast *api.WeatherForecast) *fyne.Container {
 	bottomBox := container.NewHBox()
-
 	for i := 1; i < len(forecast.Daily); i++ {
+		_, month, day := time.Unix(int64(forecast.Daily[i].Dt), 0).Date()
+		weekday := time.Unix(int64(forecast.Daily[i].Dt), 0).Weekday()
+
 		weatherBottomIcon := container.NewGridWrap(
 			fyne.NewSize(150, 150),
 			canvas.NewImageFromFile(
 				fmt.Sprintf("./assets/weather/%s.png", forecast.Daily[i].Weather[0].Icon),
 			),
 		)
-		_, month, day := time.Unix(int64(forecast.Daily[i].Dt), 0).Date()
-		weekday := time.Unix(int64(forecast.Daily[i].Dt), 0).Weekday()
 
-		strMonth := formatRu.Format(month.String(), true)
-		strWeekday := formatRu.Format(weekday.String(), true)
+		monthRu := formatRu.Format(month.String(), true)
+		weekdayRu := formatRu.Format(weekday.String(), true)
 
 		weatherConditions := widget.NewLabel(fmt.Sprintf("Погодные условия: %s", forecast.Daily[i].Weather[0].Description))
 		weatherConditions.Wrapping = fyne.TextWrapWord
 
 		weatherGroup := widget.NewCard(
-			fmt.Sprintf("Дата: %s %v %s", strWeekday, day, strMonth),
+			fmt.Sprintf("Дата: %s %v %s", weekdayRu, day, monthRu),
 			"",
 			container.NewHBox(
 				container.NewVBox(
