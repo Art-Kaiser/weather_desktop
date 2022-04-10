@@ -1,4 +1,5 @@
 # weather_desktop
+Weather information received via API <a href="https://openweathermap.org" title="openweathermap">Open Weather Map</a>.
 
 Add to config .env file with your api key for OpenWeather
 
@@ -20,7 +21,6 @@ Enter the city in the format: <b>Москва</b> or <b>Иркутск</b> or <b
 
 
 <hr>
-Weather information received via API <a href="https://openweathermap.org" title="openweathermap">Open Weather Map</a><br>
 
 All icons are taken from Flaticon.
 
