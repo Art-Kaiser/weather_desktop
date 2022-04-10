@@ -3,7 +3,7 @@ Weather information received via API <a href="https://openweathermap.org" title=
 
 Add to config .env file with your api key for OpenWeather
 
-API_WEATHER_KEY=YorApiKey
+<b>API_WEATHER_KEY=YorApiKey</b>
 <hr>
 
 The program makes a request for the specified location 1 time per minute to get the weather for the current day. 
