@@ -11,7 +11,7 @@ And once every 10 minutes, to get the weather for the week. At the moment, the f
 
 <hr>
 Important: currently only the Russian language and region are supported.<br>
-Enter the city in the format: <b>Москва</b> or <b>Иркутск</b> or <b>Московская область</b> or <b>Краснодарский край</b> and the like.
+Enter the city in the format: <b>Москва</b> or <b>Иркутск</b> or <b>Московская область</b> or <b>Краснодарский край</b> etc.
 
 <hr>
 
